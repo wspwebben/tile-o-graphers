@@ -8,6 +8,12 @@ export enum CellType {
   Monster,
 }
 
+export enum CellState {
+  Idle,
+  Selected,
+  SelectedError,
+}
+
 type Grid<Cell extends number> = Cell[][];
 
 export const createEmptyGrid = (size: number): Grid<CellType> =>

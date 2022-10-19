@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from "vue";
 import FieldCell from "./FieldCell.vue";
-import { CellType, createEmptyGrid } from "./types";
+import { CellType, CellState, createEmptyGrid } from "./types";
 
 const GRID_SIZE = 6;
 const grid = ref(createEmptyGrid(GRID_SIZE));
@@ -32,18 +32,42 @@ const selectedCells = computed<Cell[]>(() => {
   });
 });
 
-function isHovered(x: number, y: number) {
-  return selectedCells.value.some((cell) => cell.x == x && cell.y == y);
-}
-
 function trackHoveredCell(cell: Cell) {
   position.value = cell;
 }
 
 function fillSelectedCells() {
+  if (canFillSelectedCells.value === false) {
+    return;
+  }
+
   for (const { x, y } of selectedCells.value) {
     grid.value[y][x] = currentTile.value;
   }
+}
+
+const canFillSelectedCells = computed(() => {
+  return selectedCells.value.every(({ x, y }) => {
+    if (x < 0 || y < 0) return false;
+    if (x >= GRID_SIZE || y >= GRID_SIZE) return false;
+    if (grid.value[y][x] !== CellType.Empty) return false;
+
+    return true;
+  });
+});
+
+function getCellState(x: number, y: number) {
+  const isSelected = selectedCells.value.some(
+    (cell) => cell.x == x && cell.y == y
+  );
+
+  if (!isSelected) return CellState.Idle;
+
+  if (canFillSelectedCells.value === false) {
+    return CellState.SelectedError;
+  }
+
+  return CellState.Selected;
 }
 </script>
 
@@ -58,7 +82,7 @@ function fillSelectedCells() {
         <div class="cell" v-for="(cell, x) in row" :key="x">
           <FieldCell
             :cell="cell"
-            :hovered="isHovered(x, y)"
+            :state="getCellState(x, y)"
             @mouseenter="trackHoveredCell({ x, y })"
           />
         </div>

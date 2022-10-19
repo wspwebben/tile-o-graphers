@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { CellType } from "./types";
-import { assertNever } from "@/helpers"
+import { CellType, CellState } from "./types";
+import { assertNever } from "@/helpers";
 
 const props = defineProps<{
   cell: CellType;
-  hovered: boolean;
+  state: CellState;
 }>();
 
 const emit = defineEmits<{
@@ -33,6 +33,20 @@ const type = computed(() => {
       return "";
   }
 });
+
+const stateClass = computed(() => {
+  switch (props.state) {
+    case CellState.Idle:
+      return "idle";
+    case CellState.Selected:
+      return "selected";
+    case CellState.SelectedError:
+      return "error";
+    default:
+      assertNever(props.state);
+      return "";
+  }
+});
 </script>
 
 <template>
@@ -40,7 +54,7 @@ const type = computed(() => {
     class="field-cell"
     :class="{
       [`field-cell--${type}`]: true,
-      'field-cell--hover': hovered,
+      [`field-cell--${stateClass}`]: true,
     }"
     type="button"
     @click="emit('click')"
@@ -84,7 +98,11 @@ const type = computed(() => {
   --field-cell-color: #852d7f;
 }
 
-.field-cell--hover {
+.field-cell--selected {
   opacity: 0.8;
+}
+
+.field-cell--error {
+  --field-cell-color: #e51c1c;
 }
 </style>
