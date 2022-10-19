@@ -1,29 +1,66 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import FieldCell from "./FieldCell.vue";
 import { CellType, createEmptyGrid } from "./types";
 
 const GRID_SIZE = 6;
 const grid = ref(createEmptyGrid(GRID_SIZE));
+const shape = [
+  [0, 0],
+  [0, 1],
+  [1, 0],
+];
 
-// grid.value[2][0] = CellType.Water;
-// grid.value[2][1] = CellType.Mountain;
-// grid.value[2][2] = CellType.Monster;
-// grid.value[2][3] = CellType.Village;
-// grid.value[2][4] = CellType.Forest;
-// grid.value[2][5] = CellType.Field;
+type Cell = {
+  x: number;
+  y: number;
+};
 
-function selectCell(x: number, y: number) {
-  grid.value[y][x] = CellType.Monster
+const position = ref<Cell>({
+  x: 0,
+  y: 0,
+});
+
+const currentTile = ref<CellType>(CellType.Monster);
+
+const selectedCells = computed<Cell[]>(() => {
+  return shape.map(([dx, dy]) => {
+    return {
+      x: position.value.x + dx,
+      y: position.value.y + dy,
+    };
+  });
+});
+
+function isHovered(x: number, y: number) {
+  return selectedCells.value.some((cell) => cell.x == x && cell.y == y);
+}
+
+function trackHoveredCell(cell: Cell) {
+  position.value = cell;
+}
+
+function fillSelectedCells() {
+  for (const { x, y } of selectedCells.value) {
+    grid.value[y][x] = currentTile.value;
+  }
 }
 </script>
 
 <template>
   <div class="wrapper">
-    <div class="grid" :style="`--grid-size: ${GRID_SIZE}`">
+    <div
+      class="grid"
+      :style="`--grid-size: ${GRID_SIZE}`"
+      @click="fillSelectedCells"
+    >
       <div class="row" v-for="(row, y) in grid" :key="y">
         <div class="cell" v-for="(cell, x) in row" :key="x">
-          <FieldCell :cell="cell" @click="selectCell(x, y)" />
+          <FieldCell
+            :cell="cell"
+            :hovered="isHovered(x, y)"
+            @mouseenter="trackHoveredCell({ x, y })"
+          />
         </div>
       </div>
     </div>

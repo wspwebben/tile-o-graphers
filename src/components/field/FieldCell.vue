@@ -5,6 +5,7 @@ import { assertNever } from "@/helpers"
 
 const props = defineProps<{
   cell: CellType;
+  hovered: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -37,7 +38,10 @@ const type = computed(() => {
 <template>
   <button
     class="field-cell"
-    :class="`field-cell--${type}`"
+    :class="{
+      [`field-cell--${type}`]: true,
+      'field-cell--hover': hovered,
+    }"
     type="button"
     @click="emit('click')"
   />
@@ -80,8 +84,7 @@ const type = computed(() => {
   --field-cell-color: #852d7f;
 }
 
-.field-cell:hover {
-  /* --field-cell-color: #d3c2b2a0; */
+.field-cell--hover {
   opacity: 0.8;
 }
 </style>
