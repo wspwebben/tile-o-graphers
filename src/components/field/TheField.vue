@@ -32,6 +32,14 @@ const selectedCells = computed<Cell[]>(() => {
   });
 });
 
+function getCellValue({ x, y }: Cell) {
+  return grid.value[y][x];
+}
+
+function setCellValue({ x, y }: Cell, value: CellType) {
+  grid.value[y][x] = value;
+}
+
 function trackHoveredCell(cell: Cell) {
   position.value = cell;
 }
@@ -41,24 +49,24 @@ function fillSelectedCells() {
     return;
   }
 
-  for (const { x, y } of selectedCells.value) {
-    grid.value[y][x] = currentTile.value;
+  for (const cell of selectedCells.value) {
+    setCellValue(cell, currentTile.value);
   }
 }
 
 const canFillSelectedCells = computed(() => {
-  return selectedCells.value.every(({ x, y }) => {
-    if (x < 0 || y < 0) return false;
-    if (x >= GRID_SIZE || y >= GRID_SIZE) return false;
-    if (grid.value[y][x] !== CellType.Empty) return false;
+  return selectedCells.value.every((cell) => {
+    if (cell.x < 0 || cell.y < 0) return false;
+    if (cell.x >= GRID_SIZE || cell.y >= GRID_SIZE) return false;
+    if (getCellValue(cell) !== CellType.Empty) return false;
 
     return true;
   });
 });
 
-function getCellState(x: number, y: number) {
+function getCellState(cell: Cell) {
   const isSelected = selectedCells.value.some(
-    (cell) => cell.x == x && cell.y == y
+    ({ x, y }) => cell.x == x && cell.y == y
   );
 
   if (!isSelected) return CellState.Idle;
@@ -82,7 +90,7 @@ function getCellState(x: number, y: number) {
         <div class="cell" v-for="(cell, x) in row" :key="x">
           <FieldCell
             :cell="cell"
-            :state="getCellState(x, y)"
+            :state="getCellState({ x, y })"
             @mouseenter="trackHoveredCell({ x, y })"
           />
         </div>
