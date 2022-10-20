@@ -9,6 +9,7 @@ const shape = [
   [0, 0],
   [0, 1],
   [1, 0],
+  [2, 0],
 ];
 
 type Cell = {
@@ -109,7 +110,7 @@ function getCellState(cell: Cell) {
   --grid-gap: 1px;
 
   display: grid;
-  grid-template-columns: repeat(var(--grid-size), min-content);
+  grid-template-rows: repeat(var(--grid-size), min-content);
   gap: var(--grid-gap);
   background-color: #000;
   padding: var(--grid-gap);
@@ -117,7 +118,7 @@ function getCellState(cell: Cell) {
 
 .row {
   display: grid;
-  grid-template-rows: repeat(var(--grid-size), min-content);
+  grid-template-columns: repeat(var(--grid-size), min-content);
   gap: var(--grid-gap);
 }
 </style>
