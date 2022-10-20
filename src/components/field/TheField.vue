@@ -17,10 +17,18 @@ type Cell = {
   y: number;
 };
 
-const position = ref<Cell>({
-  x: 0,
-  y: 0,
-});
+const OUT_OF_BOUNDS: Cell = {
+  x: -1,
+  y: -1,
+};
+
+function compareCells(a: Cell, b: Cell) {
+  return a.x === b.x && a.y === b.y;
+}
+
+const compareCellWith = (a: Cell) => (b: Cell) => compareCells(a, b);
+
+const position = ref<Cell>(OUT_OF_BOUNDS);
 
 const currentTile = ref<CellType>(CellType.Monster);
 
@@ -66,9 +74,11 @@ const canFillSelectedCells = computed(() => {
 });
 
 function getCellState(cell: Cell) {
-  const isSelected = selectedCells.value.some(
-    ({ x, y }) => cell.x == x && cell.y == y
-  );
+  if (position.value === OUT_OF_BOUNDS) {
+    return CellState.Idle;
+  }
+
+  const isSelected = selectedCells.value.some(compareCellWith(cell));
 
   if (!isSelected) return CellState.Idle;
 
@@ -77,6 +87,10 @@ function getCellState(cell: Cell) {
   }
 
   return CellState.Selected;
+}
+
+function clearHover() {
+  position.value = OUT_OF_BOUNDS;
 }
 </script>
 
@@ -93,6 +107,7 @@ function getCellState(cell: Cell) {
             :cell="cell"
             :state="getCellState({ x, y })"
             @mouseenter="trackHoveredCell({ x, y })"
+            @mouseleave="clearHover"
           />
         </div>
       </div>
