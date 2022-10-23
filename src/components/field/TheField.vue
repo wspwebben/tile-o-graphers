@@ -3,8 +3,14 @@ import { ref, computed } from "vue";
 import { useMagicKeys, whenever } from "@vueuse/core";
 
 import FieldCell from "./FieldCell.vue";
-import { CellType, CellState, createEmptyGrid } from "./types";
-import { Shape, initialShape, rotate, mirror } from "./rotate";
+import {
+  ResearchCard,
+  CellType,
+  PlayableCellType,
+  CellState,
+  createEmptyGrid,
+} from "./types";
+import { rotate, mirror } from "./rotate";
 
 type Cell = {
   x: number;
@@ -16,16 +22,6 @@ const OUT_OF_BOUNDS: Cell = {
   y: -1,
 };
 
-const { r, m } = useMagicKeys();
-
-whenever(r, () => {
-  shape.value = rotate(shape.value);
-});
-
-whenever(m, () => {
-  shape.value = mirror(shape.value);
-});
-
 function compareCells(a: Cell, b: Cell) {
   return a.x === b.x && a.y === b.y;
 }
@@ -36,11 +32,28 @@ const GRID_SIZE = 6;
 
 const grid = ref(createEmptyGrid(GRID_SIZE));
 const position = ref<Cell>(OUT_OF_BOUNDS);
-const shape = ref<Shape>(initialShape);
-const currentTile = ref<CellType>(CellType.Monster);
+const card = ref<ResearchCard>({
+  type: CellType.Forest,
+  shape: [
+    [0, 0],
+    [1, 0],
+    [2, 0],
+    [0, 1],
+  ],
+});
+
+const { r, m } = useMagicKeys();
+
+whenever(r, () => {
+  card.value.shape = rotate(card.value.shape);
+});
+
+whenever(m, () => {
+  card.value.shape = mirror(card.value.shape);
+});
 
 const selectedCells = computed<Cell[]>(() => {
-  return shape.value.map(([dx, dy]) => {
+  return card.value.shape.map(([dx, dy]) => {
     return {
       x: position.value.x + dx,
       y: position.value.y + dy,
@@ -52,7 +65,7 @@ function getCellValue({ x, y }: Cell) {
   return grid.value[y][x];
 }
 
-function setCellValue({ x, y }: Cell, value: CellType) {
+function setCellValue({ x, y }: Cell, value: PlayableCellType) {
   grid.value[y][x] = value;
 }
 
@@ -66,7 +79,7 @@ function fillSelectedCells() {
   }
 
   for (const cell of selectedCells.value) {
-    setCellValue(cell, currentTile.value);
+    setCellValue(cell, card.value.type);
   }
 }
 
