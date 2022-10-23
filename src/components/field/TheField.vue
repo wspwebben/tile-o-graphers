@@ -2,15 +2,7 @@
 import { ref, computed } from "vue";
 import FieldCell from "./FieldCell.vue";
 import { CellType, CellState, createEmptyGrid } from "./types";
-
-const GRID_SIZE = 6;
-const grid = ref(createEmptyGrid(GRID_SIZE));
-const shape = [
-  [0, 0],
-  [0, 1],
-  [1, 0],
-  [2, 0],
-];
+import { Shape, initialShape, rotate } from './rotate'
 
 type Cell = {
   x: number;
@@ -28,12 +20,15 @@ function compareCells(a: Cell, b: Cell) {
 
 const compareCellWith = (a: Cell) => (b: Cell) => compareCells(a, b);
 
-const position = ref<Cell>(OUT_OF_BOUNDS);
+const GRID_SIZE = 6;
 
+const grid = ref(createEmptyGrid(GRID_SIZE));
+const position = ref<Cell>(OUT_OF_BOUNDS);
+const shape = ref<Shape>(initialShape)
 const currentTile = ref<CellType>(CellType.Monster);
 
 const selectedCells = computed<Cell[]>(() => {
-  return shape.map(([dx, dy]) => {
+  return shape.value.map(([dx, dy]) => {
     return {
       x: position.value.x + dx,
       y: position.value.y + dy,
@@ -54,6 +49,9 @@ function trackHoveredCell(cell: Cell) {
 }
 
 function fillSelectedCells() {
+  shape.value = rotate(shape.value)
+  return
+
   if (canFillSelectedCells.value === false) {
     return;
   }
