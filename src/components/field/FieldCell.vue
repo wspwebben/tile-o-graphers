@@ -70,6 +70,10 @@ const stateClass = computed(() => {
   border: 0;
 }
 
+.field-cell:focus {
+  outline: 0;
+}
+
 .field-cell--empty {
   --field-cell-color: #d3c2b2;
 }
