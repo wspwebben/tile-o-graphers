@@ -12,3 +12,7 @@ export const initialShape: Shape = [
 export function rotate(shape: Shape): Shape {
   return shape.map(([dx, dy]) => [-dy, dx]);
 }
+
+export function mirror(shape: Shape): Shape {
+  return shape.map(([dx, dy]) => [-dx, dy]);
+}

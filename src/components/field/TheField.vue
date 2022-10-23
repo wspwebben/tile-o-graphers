@@ -4,7 +4,7 @@ import { useMagicKeys, whenever } from "@vueuse/core";
 
 import FieldCell from "./FieldCell.vue";
 import { CellType, CellState, createEmptyGrid } from "./types";
-import { Shape, initialShape, rotate } from "./rotate";
+import { Shape, initialShape, rotate, mirror } from "./rotate";
 
 type Cell = {
   x: number;
@@ -16,10 +16,14 @@ const OUT_OF_BOUNDS: Cell = {
   y: -1,
 };
 
-const { r } = useMagicKeys();
+const { r, m } = useMagicKeys();
 
 whenever(r, () => {
   shape.value = rotate(shape.value);
+});
+
+whenever(m, () => {
+  shape.value = mirror(shape.value);
 });
 
 function compareCells(a: Cell, b: Cell) {
