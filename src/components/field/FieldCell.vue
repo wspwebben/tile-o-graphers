@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { CellType, CellState } from "./types";
-import { assertNever } from "@/helpers";
+
+import { CellType, CellState } from "../../types";
+import { assertNever } from "../../helpers";
 
 const props = defineProps<{
   cell: CellType;

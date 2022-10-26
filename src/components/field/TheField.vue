@@ -3,14 +3,9 @@ import { ref, computed } from "vue";
 import { useMagicKeys, whenever } from "@vueuse/core";
 
 import FieldCell from "./FieldCell.vue";
-import {
-  ResearchCard,
-  CellType,
-  PlayableCellType,
-  CellState,
-  createEmptyGrid,
-} from "./types";
-import { rotate, mirror } from "./rotate";
+import type { PlayableCellType } from "../../types";
+import { CellType, CellState } from "../../types";
+import { createEmptyGrid, rotate, mirror } from "../../helpers";
 
 type Cell = {
   x: number;
@@ -32,7 +27,7 @@ const GRID_SIZE = 6;
 
 const grid = ref(createEmptyGrid(GRID_SIZE));
 const position = ref<Cell>(OUT_OF_BOUNDS);
-const card = ref<ResearchCard>({
+const card = ref<any>({
   type: CellType.Forest,
   shape: [
     [0, 0],
