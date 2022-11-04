@@ -3,9 +3,10 @@ import { ref, computed } from "vue";
 import { useMagicKeys, whenever } from "@vueuse/core";
 
 import FieldCell from "./FieldCell.vue";
-import type { PlayableCellType } from "../../types";
+import type { PlayableCellType, ExploreCard } from "../../types";
 import { CellType, CellState } from "../../types";
 import { createEmptyGrid, rotate, mirror } from "../../helpers";
+import { cards } from "../../assets/cards";
 
 type Cell = {
   x: number;
@@ -27,28 +28,30 @@ const GRID_SIZE = 6;
 
 const grid = ref(createEmptyGrid(GRID_SIZE));
 const position = ref<Cell>(OUT_OF_BOUNDS);
-const card = ref<any>({
-  type: CellType.Forest,
-  shape: [
-    [0, 0],
-    [1, 0],
-    [2, 0],
-    [0, 1],
-  ],
+const card = ref<ExploreCard>(cards[0]);
+
+const selection = computed(() => {
+  const terrains = card.value.terrainOptions;
+  const shapes = card.value.shapeOptions;
+
+  return {
+    terrain: terrains[0],
+    shape: shapes[0].shape,
+  };
 });
 
 const { r, m } = useMagicKeys();
 
 whenever(r, () => {
-  card.value.shape = rotate(card.value.shape);
+  selection.value.shape = rotate(selection.value.shape);
 });
 
 whenever(m, () => {
-  card.value.shape = mirror(card.value.shape);
+  selection.value.shape = mirror(selection.value.shape);
 });
 
 const selectedCells = computed<Cell[]>(() => {
-  return card.value.shape.map(([dx, dy]) => {
+  return selection.value.shape.map(([dx, dy]) => {
     return {
       x: position.value.x + dx,
       y: position.value.y + dy,
@@ -74,8 +77,10 @@ function fillSelectedCells() {
   }
 
   for (const cell of selectedCells.value) {
-    setCellValue(cell, card.value.type);
+    setCellValue(cell, selection.value.terrain);
   }
+
+  card.value = cards.pop();
 }
 
 const canFillSelectedCells = computed(() => {

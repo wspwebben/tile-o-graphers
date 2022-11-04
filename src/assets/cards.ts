@@ -1,4 +1,4 @@
-import type { RuinsCard, AmbushCard, ResearchCard } from "../types";
+import type { RuinsCard, AmbushCard, ExploreCard } from "../types";
 import { CardType, CellType, Direction, Corner } from "../types";
 
 // Ruins
@@ -12,10 +12,10 @@ const ruins2: RuinsCard = {
   title: "Outpost Ruins",
 };
 
-// Research
+// Explore
 // Basic
-const card1: ResearchCard = {
-  type: CardType.Research,
+const card1: ExploreCard = {
+  type: CardType.Explore,
   title: "Great River",
   time: 1,
   terrainOptions: [CellType.Water],
@@ -41,8 +41,8 @@ const card1: ResearchCard = {
   ],
 };
 
-const card2: ResearchCard = {
-  type: CardType.Research,
+const card2: ExploreCard = {
+  type: CardType.Explore,
   title: "Farmland",
   time: 1,
   terrainOptions: [CellType.Field],
@@ -67,8 +67,8 @@ const card2: ResearchCard = {
   ],
 };
 
-const card3: ResearchCard = {
-  type: CardType.Research,
+const card3: ExploreCard = {
+  type: CardType.Explore,
   title: "Hamlet",
   time: 1,
   terrainOptions: [CellType.Village],
@@ -94,8 +94,8 @@ const card3: ResearchCard = {
   ],
 };
 
-const card4: ResearchCard = {
-  type: CardType.Research,
+const card4: ExploreCard = {
+  type: CardType.Explore,
   title: "Forgotten Forest",
   time: 1,
   terrainOptions: [CellType.Forest],
@@ -121,8 +121,8 @@ const card4: ResearchCard = {
 
 // Advanced
 
-const card5: ResearchCard = {
-  type: CardType.Research,
+const card5: ExploreCard = {
+  type: CardType.Explore,
   title: "Hinterland Stream",
   time: 2,
   terrainOptions: [CellType.Field, CellType.Water],
@@ -140,8 +140,8 @@ const card5: ResearchCard = {
   ],
 };
 
-const card6: ResearchCard = {
-  type: CardType.Research,
+const card6: ExploreCard = {
+  type: CardType.Explore,
   title: "Treetop Village",
   time: 2,
   terrainOptions: [CellType.Forest, CellType.Village],
@@ -159,8 +159,8 @@ const card6: ResearchCard = {
   ],
 };
 
-const card7: ResearchCard = {
-  type: CardType.Research,
+const card7: ExploreCard = {
+  type: CardType.Explore,
   title: "Marshlands",
   time: 2,
   terrainOptions: [CellType.Forest, CellType.Water],
@@ -178,8 +178,8 @@ const card7: ResearchCard = {
   ],
 };
 
-const card8: ResearchCard = {
-  type: CardType.Research,
+const card8: ExploreCard = {
+  type: CardType.Explore,
   title: "Fishing Village",
   time: 2,
   terrainOptions: [CellType.Village, CellType.Water],
@@ -197,8 +197,8 @@ const card8: ResearchCard = {
   ],
 };
 
-const card9: ResearchCard = {
-  type: CardType.Research,
+const card9: ExploreCard = {
+  type: CardType.Explore,
   title: "Orchad",
   time: 2,
   terrainOptions: [CellType.Forest, CellType.Field],
@@ -215,8 +215,8 @@ const card9: ResearchCard = {
   ],
 };
 
-const card10: ResearchCard = {
-  type: CardType.Research,
+const card10: ExploreCard = {
+  type: CardType.Explore,
   title: "Homestad",
   time: 2,
   terrainOptions: [CellType.Village, CellType.Field],
@@ -233,8 +233,8 @@ const card10: ResearchCard = {
   ],
 };
 
-const card11: ResearchCard = {
-  type: CardType.Research,
+const card11: ExploreCard = {
+  type: CardType.Explore,
   title: "Rift Lands",
   time: 0,
   terrainOptions: [

@@ -4,7 +4,7 @@ import type { PlayableCellType } from "./grid";
 export enum CardType {
   Ruins = "ruins",
   Ambush = "ambush",
-  Research = "research",
+  Explore = "explore",
 }
 
 interface BaseCard {
@@ -38,18 +38,18 @@ export interface AmbushCard extends BaseCard {
   corner: Corner;
 }
 
-// Research
+// Explore
 
 export interface ShapeOption {
   hasBonus: boolean;
   shape: Shape;
 }
 
-export interface ResearchCard extends BaseCard {
-  type: CardType.Research;
+export interface ExploreCard extends BaseCard {
+  type: CardType.Explore;
   time: number;
   terrainOptions: PlayableCellType[];
   shapeOptions: ShapeOption[];
 }
 
-export type Card = RuinsCard | ResearchCard | AmbushCard
+export type Card = RuinsCard | ExploreCard | AmbushCard
