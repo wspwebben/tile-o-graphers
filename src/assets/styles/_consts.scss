@@ -1,0 +1,16 @@
+@use 'sass:map';
+
+$terrains: (
+  forest: #1e8112,
+  village: #aa2012,
+  field: #bd7a2e,
+  water: #1b7bb8,
+  monster: #852d7f,
+);
+
+$unplayable-terrains: (
+  empty: #d3c2b2,
+  mountain: #6e4932,
+);
+
+$terrains-full: map.merge($unplayable-terrains, $terrains);

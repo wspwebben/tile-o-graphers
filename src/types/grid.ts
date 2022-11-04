@@ -1,11 +1,11 @@
 export enum CellType {
-  Empty,
-  Mountain,
-  Forest,
-  Village,
-  Field,
-  Water,
-  Monster,
+  Empty = "empty",
+  Mountain = "mountain",
+  Forest = "forest",
+  Village = "village",
+  Field = "field",
+  Water = "water",
+  Monster = "monster",
 }
 
 export type PlayableCellType =

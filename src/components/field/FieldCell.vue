@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed } from "vue";
 
+import GridCell from "../grid/GridCell.vue";
+
 import { CellType, CellState } from "../../types";
 import { assertNever } from "../../helpers";
 
@@ -12,28 +14,6 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: "click"): void;
 }>();
-
-const type = computed(() => {
-  switch (props.cell) {
-    case CellType.Empty:
-      return "empty";
-    case CellType.Mountain:
-      return "mountain";
-    case CellType.Forest:
-      return "forest";
-    case CellType.Village:
-      return "village";
-    case CellType.Field:
-      return "field";
-    case CellType.Water:
-      return "water";
-    case CellType.Monster:
-      return "monster";
-    default:
-      assertNever(props.cell);
-      return "";
-  }
-});
 
 const stateClass = computed(() => {
   switch (props.state) {
@@ -53,61 +33,43 @@ const stateClass = computed(() => {
 <template>
   <button
     class="field-cell"
-    :class="{
-      [`field-cell--${type}`]: true,
-      [`field-cell--${stateClass}`]: true,
-    }"
+    :class="`field-cell--${stateClass}`"
     type="button"
     @click="emit('click')"
-  />
+  >
+    <GridCell class="field-cell__cell" :cell="cell" />
+  </button>
 </template>
 
-<style>
+<style lang="scss">
 .field-cell {
+  position: relative;
   display: block;
   width: 50px;
   height: 50px;
+  padding: 0;
   background-color: var(--field-cell-color, transparent);
   border: 0;
-}
 
-.field-cell:focus {
-  outline: 0;
-}
+  &__cell {
+    position: absolute;
+    inset: 0;
+  }
 
-.field-cell--empty {
-  --field-cell-color: #d3c2b2;
-}
+  &:focus {
+    outline: 0;
+  }
 
-.field-cell--mountain {
-  --field-cell-color: #6e4932;
-}
+  &--selected {
+    opacity: 0.8;
+  }
 
-.field-cell--forest {
-  --field-cell-color: #1e8112;
-}
+  &--error {
+    background-color: #e51c1c;
 
-.field-cell--village {
-  --field-cell-color: #aa2012;
-}
-
-.field-cell--field {
-  --field-cell-color: #bd7a2e;
-}
-
-.field-cell--water {
-  --field-cell-color: #1b7bb8;
-}
-
-.field-cell--monster {
-  --field-cell-color: #852d7f;
-}
-
-.field-cell--selected {
-  opacity: 0.8;
-}
-
-.field-cell--error {
-  --field-cell-color: #e51c1c;
+    > * {
+      opacity: 0;
+    }
+  }
 }
 </style>
