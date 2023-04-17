@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import TheField from "../components/field/TheField.vue";
+import { setup } from "../game/setup";
+
+setup()
 </script>
 
 <template>
-  <TheField />
+  <div>Setup:</div>
 </template>

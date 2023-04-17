@@ -21,4 +21,4 @@ export enum CellState {
   SelectedError,
 }
 
-export type Grid<Cell extends number> = Cell[][];
+export type Grid = CellType[][];
